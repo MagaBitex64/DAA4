@@ -16,24 +16,18 @@ public class Main {
         };
 
         for (String dataset : datasets) {
-            System.out.println("\n" + "=".repeat(80));
-            System.out.println("TESTING DATASET: " + dataset);
-            System.out.println("=".repeat(80));
-
+            System.out.println("\nTESTING DATASET: " + dataset);
             processDataset("data/" + dataset + ".json");
         }
 
-        System.out.println("\n" + "=".repeat(80));
-        System.out.println("ALL TESTS COMPLETED");
-        System.out.println("=".repeat(80));
+        System.out.println("\nALL TESTS COMPLETED");
     }
 
     public static void processDataset(String filepath) {
         try {
             Graph graph = DataLoader.loadGraph(filepath);
             System.out.println("\nLoaded graph: " + filepath);
-            System.out.println("Vertices: " + graph.getNumVertices() +
-                    ", Edges: " + graph.countEdges());
+            System.out.println("Vertices: " + graph.getNumVertices() + ", Edges: " + graph.countEdges());
 
             Metrics sccMetrics = new Metrics();
             TarjanSCC tarjan = new TarjanSCC(graph, sccMetrics);
@@ -44,8 +38,7 @@ public class Main {
 
             Graph condensation = tarjan.buildCondensation(sccs);
             System.out.println("\nCondensation Graph:");
-            System.out.println("Vertices (SCCs): " + condensation.getNumVertices() +
-                    ", Edges: " + condensation.countEdges());
+            System.out.println("Vertices (SCCs): " + condensation.getNumVertices() + ", Edges: " + condensation.countEdges());
 
             Metrics topoMetrics = new Metrics();
             TopologicalSort topoSort = new TopologicalSort(condensation, topoMetrics);
