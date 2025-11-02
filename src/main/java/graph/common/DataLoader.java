@@ -17,27 +17,22 @@ public class DataLoader {
                 new TypeToken<Map<String, Object>>(){}.getType());
         reader.close();
 
-        List<Map<String, Object>> nodes =
-                (List<Map<String, Object>>) data.get("nodes");
-        int numNodes = nodes.size();
-
+        int numNodes = ((Double) data.get("n")).intValue();
         Graph graph = new Graph(numNodes);
 
-        for (Map<String, Object> node : nodes) {
-            int id = ((Double) node.get("id")).intValue();
-            String name = (String) node.get("name");
-            graph.setTaskName(id, name);
+        for (int i = 0; i < numNodes; i++) {
+            graph.setTaskName(i, "Task" + i);
         }
 
         List<Map<String, Object>> edges =
                 (List<Map<String, Object>>) data.get("edges");
 
         for (Map<String, Object> edge : edges) {
-            int from = ((Double) edge.get("from")).intValue();
-            int to = ((Double) edge.get("to")).intValue();
-            double weight = (Double) edge.get("weight");
+            int u = ((Double) edge.get("u")).intValue();
+            int v = ((Double) edge.get("v")).intValue();
+            double w = ((Double) edge.get("w")).doubleValue();
 
-            graph.addEdge(from, to, weight);
+            graph.addEdge(u, v, w);
         }
 
         return graph;
@@ -52,5 +47,13 @@ public class DataLoader {
         reader.close();
 
         return data;
+    }
+
+    public static int getSource(String filepath) throws IOException {
+        Map<String, Object> data = getMetadata(filepath);
+        if (data.containsKey("source")) {
+            return ((Double) data.get("source")).intValue();
+        }
+        return 0;
     }
 }

@@ -26,8 +26,11 @@ public class Main {
     public static void processDataset(String filepath) {
         try {
             Graph graph = DataLoader.loadGraph(filepath);
+            int source = DataLoader.getSource(filepath);
+
             System.out.println("\nLoaded graph: " + filepath);
             System.out.println("Vertices: " + graph.getNumVertices() + ", Edges: " + graph.countEdges());
+            System.out.println("Source vertex: " + source);
 
             Metrics sccMetrics = new Metrics();
             TarjanSCC tarjan = new TarjanSCC(graph, sccMetrics);
@@ -64,7 +67,9 @@ public class Main {
                 Metrics spMetrics = new Metrics();
                 DAGShortestPath dagSP = new DAGShortestPath(condensation, spMetrics);
 
-                DAGShortestPath.PathResult shortestResult = dagSP.shortestPaths(0);
+                int condensedSource = findSCCContaining(sccs, source);
+
+                DAGShortestPath.PathResult shortestResult = dagSP.shortestPaths(condensedSource);
                 dagSP.printShortestPaths(shortestResult);
                 System.out.println("\nShortest Path Metrics: " + spMetrics);
 
@@ -81,5 +86,14 @@ public class Main {
             System.err.println("Error processing dataset: " + filepath);
             e.printStackTrace();
         }
+    }
+
+    private static int findSCCContaining(List<List<Integer>> sccs, int vertex) {
+        for (int i = 0; i < sccs.size(); i++) {
+            if (sccs.get(i).contains(vertex)) {
+                return i;
+            }
+        }
+        return 0;
     }
 }
