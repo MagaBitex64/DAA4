@@ -92,24 +92,6 @@ mvn test
 
 Runs 9 JUnit tests covering various graph scenarios.
 
-### Alternative: Manual Compilation
-
-If not using Maven:
-
-```bash
-# Compile
-javac -d bin -cp lib/gson-2.10.1.jar src/main/java/**/*.java src/main/java/*.java
-
-# Generate datasets
-java -cp bin:lib/gson-2.10.1.jar graph.common.DatasetGenerator
-
-# Run main
-java -cp bin:lib/gson-2.10.1.jar Main
-
-# Run tests
-javac -d bin -cp bin:lib/junit-jupiter-api-5.9.3.jar:lib/gson-2.10.1.jar src/test/java/*.java
-java -cp bin:lib/junit-jupiter-api-5.9.3.jar:lib/junit-jupiter-engine-5.9.3.jar:lib/gson-2.10.1.jar org.junit.platform.console.ConsoleLauncher --scan-classpath
-```
 
 ## Dataset Description
 
